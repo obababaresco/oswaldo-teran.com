@@ -2,6 +2,7 @@
 // Zona de JavaScript (Server Side)
 import '../styles/global.css';
 import Analytics from '@vercel/analytics/astro';
+import SpeedInsights from '@vercel/speed-insights/astro';
 const { title } = Astro.props;
 ---
 
@@ -77,6 +78,7 @@ const { title } = Astro.props;
     </footer>
 
     <Analytics />
+    <SpeedInsights />
     <script>
       // Toggle menu móvil
       document.addEventListener('DOMContentLoaded', () => {
