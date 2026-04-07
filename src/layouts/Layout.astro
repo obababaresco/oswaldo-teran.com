@@ -1,0 +1,111 @@
+---
+// Zona de JavaScript (Server Side)
+import '../styles/global.css';
+const { title } = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/png" href="/images/logo-.png" />
+    <title>{title}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Aboreto&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  </head>
+  <body>
+    <nav class="navbar">
+      <div class="navbar-container">
+        <button class="navbar-toggle" aria-label="Toggle menu" aria-expanded="false">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+        <ul class="navbar-menu">
+          <li>
+            <a href="#acerca-de" class="nav-link">
+              <svg class="nav-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                <circle cx="12" cy="7" r="4"></circle>
+              </svg>
+              <span>Acerca de</span>
+            </a>
+          </li>
+          <li>
+            <a href="#skills" class="nav-link">
+              <svg class="nav-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+                <path d="M2 17l10 5 10-5"></path>
+                <path d="M2 12l10 5 10-5"></path>
+              </svg>
+              <span>Skills</span>
+            </a>
+          </li>
+          <li>
+            <a href="#proyectos" class="nav-link">
+              <svg class="nav-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
+              </svg>
+              <span>Proyectos</span>
+            </a>
+          </li>
+          <li>
+            <a href="#cursos" class="nav-link">
+              <svg class="nav-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+                <path d="M2 17l10 5 10-5"></path>
+                <path d="M2 12l10 5 10-5"></path>
+              </svg>
+              <span>Cursos</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <div class="page-wrapper">
+      <slot />
+    </div>
+
+    <footer class="footer">
+      <div class="footer-content">
+        <p class="footer-copy">&copy; 2026 Oswaldo Ter&aacute;n. Todos los derechos reservados.</p>
+      </div>
+    </footer>
+
+    <script>
+      // Toggle menu móvil
+      document.addEventListener('DOMContentLoaded', () => {
+        const toggle = document.querySelector('.navbar-toggle') as HTMLButtonElement;
+        const menu = document.querySelector('.navbar-menu') as HTMLElement;
+
+        if (toggle && menu) {
+          toggle.addEventListener('click', () => {
+            const isExpanded = toggle.getAttribute('aria-expanded') === 'true';
+            toggle.setAttribute('aria-expanded', String(!isExpanded));
+            menu.setAttribute('data-visible', String(!isExpanded));
+          });
+
+          // Cerrar menú al hacer clic en un enlace
+          const navLinks = menu.querySelectorAll('.nav-link');
+          navLinks.forEach(link => {
+            link.addEventListener('click', () => {
+              toggle.setAttribute('aria-expanded', 'false');
+              menu.setAttribute('data-visible', 'false');
+            });
+          });
+
+          // Cerrar menú al hacer clic fuera
+          document.addEventListener('click', (e) => {
+            if (!menu.contains(e.target as Node) && !toggle.contains(e.target as Node)) {
+              toggle.setAttribute('aria-expanded', 'false');
+              menu.setAttribute('data-visible', 'false');
+            }
+          });
+        }
+      });
+    </script>
+  </body>
+</html>

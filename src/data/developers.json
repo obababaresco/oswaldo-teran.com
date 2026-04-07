@@ -1,0 +1,244 @@
+[
+  {
+    "slug": "oswaldo-teran",
+    "nombre": "Oswaldo",
+    "apellido": "Terán",
+    "roles": ["Web Developer", "Web Designer", "WordPress Developer", "Operador de IA"],
+    "bio": "Soy ingeniero de sistemas y desarrollador web. Me apasiona crear, aprender y llevar mis ideas a la realidad a través de la programación. Actualmente enfoco mi perfil en el desarrollo asistido por Inteligencia Artificial y la automatización de procesos, integrando herramientas como Cursor, Claude Code y n8n para optimizar la creación de software.",
+    "foto": "/images/oswaldo-teran/oswaldo-teran.png",
+    "social": {
+      "instagram": "https://www.instagram.com/obababaresco/",
+      "linkedin": "https://www.linkedin.com/in/oswaldo-ramon-teran-babaresco/",
+      "github": "https://github.com/obababaresco"
+    },
+    "whatsapp": "+585781984",
+    "cv": "/cv/OswaldoTeranCV.pdf",
+    "skills": [
+      { "name": "HTML5", "icon": "/images/oswaldo-teran/skills/html.svg", "years": 5 },
+      { "name": "CSS3", "icon": "/images/oswaldo-teran/skills/css3.svg", "years": 5 },
+      { "name": "JavaScript", "icon": "/images/oswaldo-teran/skills/javascript.svg", "years": 4 },
+      { "name": "Angular", "icon": "/images/oswaldo-teran/skills/angularjs.svg", "years": 2 },
+      { "name": "TypeScript", "icon": "/images/oswaldo-teran/skills/typescript.svg", "years": 2 },
+      { "name": "WordPress", "icon": "/images/oswaldo-teran/skills/wordpress.svg", "years": 4 },
+      { "name": "Hubspot", "icon": "/images/oswaldo-teran/skills/hubspot.png", "years": 3 },
+      { "name": "Git", "icon": "/images/oswaldo-teran/skills/git.svg", "years": 4 },
+      { "name": "Figma", "icon": "/images/oswaldo-teran/skills/figma.svg", "years": 3 },
+      { "name": "Cursor AI", "icon": "/images/oswaldo-teran/skills/cursor.webp", "years": 1 },
+      { "name": "Claude Code", "icon": "/images/oswaldo-teran/skills/claude.png", "years": 1 },
+      { "name": "n8n", "icon": "/images/oswaldo-teran/skills/n8n.png", "years": 1 }
+    ],
+    "proyectos": [
+      {
+        "title": "E-commerce y Plataforma a Medida - NR Industrial",
+        "shortDescription": "Desarrollo custom de tienda online, panel administrativo y blog.",
+        "longDescription": "Desarrollo integral de una plataforma e-commerce, panel administrativo y blog para NR Industrial. Construido completamente a medida (sin el uso de CMS tradicionales como WordPress) integrando Claude Code como agente de programación para optimizar la arquitectura y acelerar el desarrollo de funcionalidades complejas.",
+        "tags": ["Claude Code", "Custom Web Development", "AI Integration", "E-commerce"],
+        "image": "/images/oswaldo-teran/proyectos/nr-industrial.png",
+        "images": [
+          "/images/oswaldo-teran/proyectos/nr-industrial.png"
+        ],
+        "link": "#",
+        "pais": "Venezuela"
+      },
+      {
+        "title": "Software educativo online",
+        "shortDescription": "Componentes UI responsivos optimizados con Cursor AI.",
+        "longDescription": "Diseño y maquetación de componentes UI responsivos aplicando buenas prácticas para documentar el código. Este proyecto marcó el inicio de mi integración de Cursor AI para acelerar el desarrollo y la revisión de código.",
+        "tags": ["Angular", "TypeScript", "Cursor AI", "Figma", "UI Design", "HTML5 & CSS3"],
+        "image": "/images/oswaldo-teran/proyectos/Salware.png",
+        "images": [
+          "/images/oswaldo-teran/proyectos/Salware.png",
+          "/images/oswaldo-teran/proyectos/Interfell.png"
+        ],
+        "link": "https://app.fundacionsalware.org/auth/login",
+        "pais": "España"
+      },
+      {
+        "title": "CMS Dinámico HubSpot",
+        "shortDescription": "Temas personalizados y módulos dinámicos en HubSpot.",
+        "longDescription": "Desarrollo de temas personalizados, módulos dinámicos y consumo de API para integración de vacantes IT.",
+        "tags": ["HubSpot", "API Integration", "JavaScript", "HTML5 & CSS3"],
+        "image": "/images/oswaldo-teran/proyectos/Interfell.png",
+        "images": ["/images/oswaldo-teran/proyectos/Interfell.png"],
+        "link": "https://www.interfell.com/",
+        "pais": "Colombia"
+      },
+      {
+        "title": "Sistema de Gestión Académica Intisana",
+        "shortDescription": "Flujos de UI para 4 roles de usuario y dashboards de métricas.",
+        "longDescription": "Maquetación de flujos de UI completos para 4 roles de usuario (Admin, Profesor, Padres, Alumnos) y dashboards de métricas.",
+        "tags": ["HTML5 & CSS3", "JavaScript", "Bootstrap"],
+        "image": "/images/oswaldo-teran/proyectos/Intisana.png",
+        "images": ["/images/oswaldo-teran/proyectos/Intisana.png"],
+        "link": "#",
+        "pais": "Ecuador"
+      },
+      {
+        "title": "Sitio Web de Diseño Interior",
+        "shortDescription": "Portal corporativo de alto impacto visual con optimización SEO.",
+        "longDescription": "Portal corporativo con diseño personalizado de alto impacto visual y optimización SEO.",
+        "tags": ["WordPress", "Elementor", "Figma"],
+        "image": "/images/oswaldo-teran/proyectos/alexandrias-desing.png",
+        "images": ["/images/oswaldo-teran/proyectos/alexandrias-desing.png"],
+        "link": "https://alexandriasdesign.com/",
+        "pais": "Estados Unidos"
+      },
+      {
+        "title": "Portal de servicio técnico industrial",
+        "shortDescription": "Web informativa con custom post types y diseño personalizado.",
+        "longDescription": "Web informativa con custom post types a la medida y diseño personalizado.",
+        "tags": ["WordPress", "Elementor", "Figma"],
+        "image": "/images/oswaldo-teran/proyectos/ORBIT.png",
+        "images": ["/images/oswaldo-teran/proyectos/ORBIT.png"],
+        "link": "https://orbitvibra.com/",
+        "pais": "Venezuela"
+      },
+      {
+        "title": "Directorio Turístico Geolocalizado",
+        "shortDescription": "Gestión de locales con filtrado avanzado e integración de mapas.",
+        "longDescription": "Plataforma de gestión de locales con filtrado avanzado, integración de mapas y rutas en tiempo real.",
+        "tags": ["WordPress", "Elementor", "API Integration", "JavaScript"],
+        "image": "/images/oswaldo-teran/proyectos/devuelta-al-centro.jpg",
+        "images": ["/images/oswaldo-teran/proyectos/devuelta-al-centro.jpg"],
+        "link": "https://www.devueltaalcentro.com/",
+        "pais": "Ecuador"
+      },
+      {
+        "title": "E-commerce Tecnológico",
+        "shortDescription": "Tienda virtual con gestión de inventario y optimización de conversión.",
+        "longDescription": "Tienda virtual completa con diseño a medida, gestión de inventario y optimización de conversión.",
+        "tags": ["WordPress", "Elementor", "WooCommerce", "Figma"],
+        "image": "/images/oswaldo-teran/proyectos/compu-job.png",
+        "images": ["/images/oswaldo-teran/proyectos/compu-job.png"],
+        "link": "https://compujob.com.ec/",
+        "pais": "Ecuador"
+      },
+      {
+        "title": "Interfaz de Software ATM",
+        "shortDescription": "Maquetación de 400 pantallas para telecajero con flujos complejos.",
+        "longDescription": "Maquetación integral de 400 pantallas para telecajero, abarcando flujos transaccionales complejos y módulos de mantenimiento.",
+        "tags": ["HTML5 & CSS3", "Figma", "UI Design"],
+        "image": "/images/oswaldo-teran/proyectos/Telecajero.png",
+        "images": ["/images/oswaldo-teran/proyectos/Telecajero.png"],
+        "link": "#",
+        "pais": "Ecuador"
+      },
+      {
+        "title": "Web Corporativa Data Science",
+        "shortDescription": "Sitio optimizado para agencias tech con enfoque en velocidad y SEO.",
+        "longDescription": "Sitio informativo optimizado para agencias de tecnología con enfoque en velocidad y SEO.",
+        "tags": ["WordPress", "Figma", "Elementor"],
+        "image": "/images/oswaldo-teran/proyectos/fastdatascience.png",
+        "images": ["/images/oswaldo-teran/proyectos/fastdatascience.png"],
+        "link": "https://fastdatascience.com/",
+        "pais": "Estados Unidos"
+      },
+      {
+        "title": "Plataforma E-Learning GMAT",
+        "shortDescription": "Sistema educativo con aulas virtuales y simulación de exámenes.",
+        "longDescription": "Sistema educativo con aulas virtuales en vivo, simulación de exámenes y paneles administrativos.",
+        "tags": ["HTML5 & CSS3", "JavaScript", "Bootstrap", "Angular", "UI Design"],
+        "image": "/images/oswaldo-teran/proyectos/Gmatdudes.png",
+        "images": ["/images/oswaldo-teran/proyectos/Gmatdudes.png"],
+        "link": "https://gmat.gmatdudes.com/",
+        "pais": "Perú"
+      },
+      {
+        "title": "Sistema de Entrenamiento MLM",
+        "shortDescription": "Software para reclutamiento y capacitación de distribuidores multinivel.",
+        "longDescription": "Software para reclutamiento y capacitación de distribuidores con gestión de usuarios multinivel.",
+        "tags": ["HTML5 & CSS3", "JavaScript", "Bootstrap", "Angular", "UI Design"],
+        "image": "/images/oswaldo-teran/proyectos/myhbl.png",
+        "images": ["/images/oswaldo-teran/proyectos/myhbl.png"],
+        "link": "https://myhbl.com/",
+        "pais": "Colombia"
+      },
+      {
+        "title": "Web Marca Personal",
+        "shortDescription": "Frontend de alto rendimiento para identidad digital y posicionamiento.",
+        "longDescription": "Desarrollo frontend de alto rendimiento enfocado en la identidad digital y posicionamiento web.",
+        "tags": ["HTML5 & CSS3", "JavaScript", "Figma", "UI Design"],
+        "image": "/images/oswaldo-teran/proyectos/alex-fernandez.png",
+        "images": ["/images/oswaldo-teran/proyectos/alex-fernandez.png"],
+        "link": "https://alexfernandez.com/",
+        "pais": "Estados Unidos"
+      },
+      {
+        "title": "Sistema de Gestión Gubernamental",
+        "shortDescription": "Modelado de datos y arquitectura para administración de recursos estatales.",
+        "longDescription": "Análisis, modelado de datos y arquitectura de software para administración de recursos estatales (SIARE).",
+        "tags": ["Angular", "TypeScript", "Data Analysis"],
+        "image": "/images/oswaldo-teran/proyectos/Siare.png",
+        "images": ["/images/oswaldo-teran/proyectos/Siare.png"],
+        "link": "#",
+        "pais": "México"
+      }
+    ],
+    "cursos": [
+      {
+        "titulo": "Automatización de Flujos de Trabajo con n8n",
+        "plataforma": "Platzi",
+        "año": "2026",
+        "horas": 10
+      },
+      {
+        "titulo": "Fundamentos de Angular",
+        "plataforma": "Platzi",
+        "año": "2022",
+        "horas": 15
+      },
+      {
+        "titulo": "FrontEnd Developer",
+        "plataforma": "Platzi",
+        "año": "2022",
+        "horas": 15
+      },
+      {
+        "titulo": "Curso práctico de WordPress",
+        "plataforma": "Platzi",
+        "año": "2025",
+        "horas": 15
+      },
+      {
+        "titulo": "Curso práctico de HTML y CSS",
+        "plataforma": "Platzi",
+        "año": "2025",
+        "horas": 16
+      },
+      {
+        "titulo": "Git y GitHub Profesional",
+        "plataforma": "Platzi",
+        "año": "2023",
+        "horas": 22
+      },
+      {
+        "titulo": "Maquetación Mobile First",
+        "plataforma": "Platzi",
+        "año": "2025",
+        "horas": 25
+      },
+      {
+        "titulo": "Creación de Páginas Web",
+        "plataforma": "Platzi",
+        "año": "2025",
+        "horas": 14
+      }
+    ],
+    "recomendaciones": [
+      {
+        "autor": "Génesis Andreina Durán Linárez",
+        "cargo": "Graphic designer | UX UI designer | Digital design",
+        "relacion": "Trabajó con Oswaldo en el mismo equipo",
+        "fecha": "2 de mayo de 2023",
+        "mensaje": "Tengo la oportunidad de dar mi opinión personal y profesional sobre Oswaldo. En lo personal puedo decir que es una persona ordenada, comprometida, extremadamente responsable. En lo profesional podría extenderme, tener a Oswaldo en un equipo de trabajo significa que nada estará hecho por estar hecho porque su atención al detalle es increíble, se preocupa porque todo esté perfecto."
+      },
+      {
+        "autor": "Gerson Abdiel Vera Morales",
+        "cargo": "Gestor de Proyectos de Software | Desarrollo y Gestión de Equipos Remotos",
+        "relacion": "Supervisó directamente a Oswaldo",
+        "fecha": "2 de mayo de 2023",
+        "mensaje": "Es un placer recomendar a Oswaldo Terán Babaresco como desarrollador Front-End. Con su sólido conocimiento en plataformas como Hubspot, Wordpress y SEO, ha demostrado ser un talento valioso para cualquier proyecto. Su habilidad para el desarrollo web es excepcional, pero lo que realmente lo distingue es su enfoque en el diseño y la experiencia de usuario."
+      }
+    ]
+  }
+]
