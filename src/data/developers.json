@@ -29,6 +29,22 @@
     ],
     "proyectos": [
       {
+        "title": "Sistema POS - Cardenales Sports Bar",
+        "shortDescription": "Sistema de ventas, inventario y cierre de caja con tasa BCV en tiempo real.",
+        "longDescription": "Sistema POS completo para un sports bar en Barquisimeto, Venezuela. Gestiona ventas multi-moneda (USD, Bs, EUR), inventario con variantes y combos, clientes con crédito/fiado, reportes financieros y cierre de caja. Integra tasa BCV en tiempo real con 3 fuentes en cascada, autenticación por roles (admin, supervisor, mesonero) y consumo retroactivo. Desarrollado con Claude Code como agente de programación.",
+        "tags": ["Next.js", "TypeScript", "Supabase", "Prisma", "Tailwind CSS", "Claude Code"],
+        "image": "/images/oswaldo-teran/proyectos/cardenales/cardenales-sports-bar.png",
+        "images": [
+          "/images/oswaldo-teran/proyectos/cardenales/cardenales-sports-bar.png",
+          "/images/oswaldo-teran/proyectos/cardenales/dashboard.png",
+          "/images/oswaldo-teran/proyectos/cardenales/ventas.png",
+          "/images/oswaldo-teran/proyectos/cardenales/inventario.png",
+          "/images/oswaldo-teran/proyectos/cardenales/caja.png"
+        ],
+        "link": "https://cardenales-sports-bar.vercel.app/",
+        "pais": "Venezuela"
+      },
+      {
         "title": "E-commerce y Plataforma a Medida - NR Industrial",
         "shortDescription": "Desarrollo custom de tienda online, panel administrativo y blog.",
         "longDescription": "Desarrollo integral de una plataforma e-commerce, panel administrativo y blog para NR Industrial. Construido completamente a medida (sin el uso de CMS tradicionales como WordPress) integrando Claude Code como agente de programación para optimizar la arquitectura y acelerar el desarrollo de funcionalidades complejas.",
@@ -47,8 +63,7 @@
         "tags": ["Angular", "TypeScript", "Cursor AI", "Figma", "UI Design", "HTML5 & CSS3"],
         "image": "/images/oswaldo-teran/proyectos/Salware.png",
         "images": [
-          "/images/oswaldo-teran/proyectos/Salware.png",
-          "/images/oswaldo-teran/proyectos/Interfell.png"
+          "/images/oswaldo-teran/proyectos/Salware.png"
         ],
         "link": "https://app.fundacionsalware.org/auth/login",
         "pais": "España"
