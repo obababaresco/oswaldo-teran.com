@@ -164,18 +164,20 @@ const hasRecommendationCarousel = dev.recomendaciones && dev.recomendaciones.len
     <section class="skills-section" id="skills">
       <div class="section-container">
         <h2 class="section-title">Habilidades Técnicas</h2>
-        <div class="skills-tags">
-          {dev.skills.map((skill) => (
-            <div class="skill-tag">
-              {skill.icon ? (
-                <img src={resolvePath(skill.icon)} alt={skill.name} class="skill-icon" />
-              ) : (
-                <span class="skill-icon-text">{skill.name.charAt(0)}</span>
-              )}
-              <span class="skill-tag-name">{skill.name}</span>
-              <span class="skill-tag-years">{skill.years} {skill.years === 1 ? 'año' : 'años'}</span>
-            </div>
-          ))}
+        <div class="skills-tags-wrapper">
+          <div class="skills-tags" id="skills-tags">
+            {dev.skills.map((skill) => (
+              <div class="skill-tag">
+                {skill.icon ? (
+                  <img src={resolvePath(skill.icon)} alt={skill.name} class="skill-icon" />
+                ) : (
+                  <span class="skill-icon-text">{skill.name.charAt(0)}</span>
+                )}
+                <span class="skill-tag-name">{skill.name}</span>
+                <span class="skill-tag-years">{skill.years} {skill.years === 1 ? 'año' : 'años'}</span>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </section>
@@ -895,6 +897,248 @@ const hasRecommendationCarousel = dev.recomendaciones && dev.recomendaciones.len
     };
 
     // Ejecutar al cargar y al redimensionar
+    init();
+
+    let resizeTimeout: ReturnType<typeof setTimeout>;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(() => {
+        stopAutoSlide();
+        init();
+      }, 250);
+    });
+  });
+
+  // Carrusel de skills para móvil (3 líneas por página)
+  document.addEventListener('DOMContentLoaded', () => {
+    const skillsContainer = document.getElementById('skills-tags') as HTMLElement;
+    const skillsWrapper = skillsContainer?.parentElement as HTMLElement;
+    if (!skillsContainer || !skillsWrapper) return;
+
+    const isMobile = () => window.innerWidth <= 768;
+    const LINES_PER_PAGE = 3;
+
+    let currentPage = 0;
+    let totalPages = 0;
+    let pageHeight = 0;
+    let pagePositions: number[] = [];
+    let autoSlideInterval: ReturnType<typeof setInterval> | null = null;
+    let isDragging = false;
+    let startY = 0;
+    let startTranslate = 0;
+    let currentTranslate = 0;
+    let isUserInteracting = false;
+
+    const calculatePages = () => {
+      if (!isMobile()) {
+        totalPages = 1;
+        pageHeight = 0;
+        return;
+      }
+
+      const skillTags = Array.from(skillsContainer.children) as HTMLElement[];
+      if (skillTags.length === 0) return;
+
+      skillsContainer.style.transform = 'translateY(0)';
+
+      requestAnimationFrame(() => {
+        const containerRect = skillsContainer.getBoundingClientRect();
+        const tagPositions = skillTags.map((tag) => {
+          const rect = tag.getBoundingClientRect();
+          return {
+            element: tag,
+            top: rect.top - containerRect.top,
+            bottom: rect.bottom - containerRect.top,
+            height: rect.height
+          };
+        });
+
+        if (tagPositions.length === 0) return;
+
+        // Agrupar en líneas por posición Y
+        const lines: { top: number; bottom: number }[] = [];
+        tagPositions.forEach(pos => {
+          const existingLine = lines.find(line => Math.abs(line.top - pos.top) < 10);
+          if (existingLine) {
+            existingLine.bottom = Math.max(existingLine.bottom, pos.bottom);
+          } else {
+            lines.push({ top: pos.top, bottom: pos.bottom });
+          }
+        });
+
+        lines.sort((a, b) => a.top - b.top);
+
+        if (lines.length <= LINES_PER_PAGE) {
+          pagePositions = [0];
+          totalPages = 1;
+          pageHeight = lines[lines.length - 1].bottom - lines[0].top;
+          skillsWrapper.style.height = '';
+          skillsWrapper.style.overflow = '';
+          updateSkillsPosition(0, false);
+          return;
+        }
+
+        // Altura de la primera página = 3 líneas
+        const firstPageBottom = lines[LINES_PER_PAGE - 1].bottom;
+        pageHeight = firstPageBottom - lines[0].top;
+
+        // Calcular posiciones de cada página de 3 líneas
+        pagePositions = [0];
+        for (let i = LINES_PER_PAGE; i < lines.length; i += LINES_PER_PAGE) {
+          pagePositions.push(lines[i].top - lines[0].top);
+        }
+
+        totalPages = pagePositions.length;
+
+        if (totalPages > 1) {
+          skillsWrapper.style.height = `${pageHeight}px`;
+          skillsWrapper.style.overflow = 'hidden';
+        }
+
+        updateSkillsPosition(0, false);
+
+        if (totalPages > 1) {
+          startAutoSlide();
+        }
+      });
+    };
+
+    const updateSkillsPosition = (page: number, animate = true) => {
+      if (totalPages <= 1) {
+        skillsContainer.style.transform = 'translateY(0)';
+        currentTranslate = 0;
+        return;
+      }
+
+      currentPage = Math.max(0, Math.min(page, totalPages - 1));
+
+      let translateY = 0;
+      if (pagePositions.length > currentPage) {
+        translateY = -pagePositions[currentPage];
+      } else {
+        translateY = -(currentPage * pageHeight);
+      }
+
+      currentTranslate = translateY;
+      skillsContainer.style.transition = animate ? 'transform 0.5s ease' : 'none';
+      skillsContainer.style.transform = `translateY(${translateY}px)`;
+    };
+
+    const goToPage = (page: number, animate = true) => {
+      if (totalPages <= 1) return;
+      updateSkillsPosition(page, animate);
+    };
+
+    const nextPage = () => {
+      if (totalPages <= 1) return;
+      const next = (currentPage + 1) % totalPages;
+      goToPage(next);
+    };
+
+    const startAutoSlide = () => {
+      if (isUserInteracting || totalPages <= 1 || !isMobile()) return;
+      stopAutoSlide();
+      autoSlideInterval = setInterval(() => {
+        if (!isUserInteracting && !isDragging && isMobile()) {
+          nextPage();
+        }
+      }, 3000);
+    };
+
+    const stopAutoSlide = () => {
+      if (autoSlideInterval) {
+        clearInterval(autoSlideInterval);
+        autoSlideInterval = null;
+      }
+    };
+
+    const handlePointerDown = (e: PointerEvent) => {
+      if (totalPages <= 1 || !isMobile()) return;
+      isDragging = true;
+      isUserInteracting = true;
+      startY = e.clientY;
+      startTranslate = currentTranslate;
+      skillsContainer.style.transition = 'none';
+      stopAutoSlide();
+      skillsContainer.setPointerCapture(e.pointerId);
+      e.preventDefault();
+    };
+
+    const handlePointerMove = (e: PointerEvent) => {
+      if (!isDragging || totalPages <= 1 || !isMobile()) return;
+      const deltaY = e.clientY - startY;
+      let newTranslate = startTranslate + deltaY;
+
+      const maxTranslate = 0;
+      let minTranslate = 0;
+      if (pagePositions.length > 0) {
+        minTranslate = -pagePositions[pagePositions.length - 1];
+      } else {
+        minTranslate = -(totalPages - 1) * pageHeight;
+      }
+
+      newTranslate = Math.max(minTranslate, Math.min(maxTranslate, newTranslate));
+      currentTranslate = newTranslate;
+      skillsContainer.style.transform = `translateY(${newTranslate}px)`;
+    };
+
+    const handlePointerUp = (e: PointerEvent) => {
+      if (!isDragging || totalPages <= 1 || !isMobile()) return;
+      isDragging = false;
+
+      const threshold = 50;
+      const deltaY = currentTranslate - startTranslate;
+
+      if (Math.abs(deltaY) > threshold) {
+        if (deltaY < 0 && currentPage < totalPages - 1) {
+          goToPage(currentPage + 1);
+        } else if (deltaY > 0 && currentPage > 0) {
+          goToPage(currentPage - 1);
+        } else {
+          goToPage(currentPage);
+        }
+      } else {
+        goToPage(currentPage);
+      }
+
+      setTimeout(() => {
+        isUserInteracting = false;
+        if (isMobile()) {
+          startAutoSlide();
+        }
+      }, 500);
+
+      if (skillsContainer.hasPointerCapture && skillsContainer.hasPointerCapture(e.pointerId)) {
+        skillsContainer.releasePointerCapture(e.pointerId);
+      }
+    };
+
+    skillsContainer.addEventListener('pointerdown', handlePointerDown);
+    skillsContainer.addEventListener('pointermove', handlePointerMove);
+    skillsContainer.addEventListener('pointerup', handlePointerUp);
+    skillsContainer.addEventListener('pointercancel', handlePointerUp);
+    skillsContainer.addEventListener('pointerleave', (e: PointerEvent) => {
+      if (isDragging) {
+        handlePointerUp(e);
+      }
+    });
+
+    const init = () => {
+      if (!isMobile()) {
+        skillsContainer.style.transform = '';
+        skillsContainer.style.transition = '';
+        skillsContainer.style.cursor = '';
+        skillsWrapper.style.height = '';
+        skillsWrapper.style.overflow = '';
+        stopAutoSlide();
+        return;
+      }
+
+      setTimeout(() => {
+        calculatePages();
+      }, 100);
+    };
+
     init();
 
     let resizeTimeout: ReturnType<typeof setTimeout>;
@@ -1685,11 +1929,17 @@ const hasRecommendationCarousel = dev.recomendaciones && dev.recomendaciones.len
     scroll-margin-top: 100px;
   }
 
+  .skills-tags-wrapper {
+    position: relative;
+  }
+
   .skills-tags {
     display: flex;
     flex-wrap: wrap;
     gap: 1rem;
     justify-content: center;
+    transition: transform 0.5s ease;
+    will-change: transform;
   }
 
   .skill-tag {
@@ -2271,8 +2521,22 @@ const hasRecommendationCarousel = dev.recomendaciones && dev.recomendaciones.len
       padding: 0 1.5rem;
     }
 
+    .skills-tags-wrapper {
+      overflow: hidden;
+      position: relative;
+      -webkit-overflow-scrolling: touch;
+    }
+
     .skills-tags {
       justify-content: flex-start;
+      cursor: grab;
+      user-select: none;
+      touch-action: pan-y;
+      will-change: transform;
+    }
+
+    .skills-tags:active {
+      cursor: grabbing;
     }
 
     .skill-tag {
@@ -2297,6 +2561,10 @@ const hasRecommendationCarousel = dev.recomendaciones && dev.recomendaciones.len
 
     .recommendations-list.is-carousel .recommendation-card {
       flex: 0 0 100%;
+    }
+
+    .projects-section {
+      padding: 3rem 0;
     }
 
     /* Carrusel de filtros en móvil */
