@@ -46,14 +46,17 @@
       },
       {
         "title": "E-commerce y Plataforma a Medida - NR Industrial",
-        "shortDescription": "Desarrollo custom de tienda online, panel administrativo y blog.",
-        "longDescription": "Desarrollo integral de una plataforma e-commerce, panel administrativo y blog para NR Industrial. Construido completamente a medida (sin el uso de CMS tradicionales como WordPress) integrando Claude Code como agente de programación para optimizar la arquitectura y acelerar el desarrollo de funcionalidades complejas.",
-        "tags": ["Claude Code", "Custom Web Development", "AI Integration", "E-commerce"],
-        "image": "/images/oswaldo-teran/proyectos/nr-industrial.png",
+        "shortDescription": "E-commerce y panel admin con tests automatizados, CI/CD e integración con MercadoLibre.",
+        "longDescription": "Plataforma e-commerce + panel administrativo a medida (sin CMS) para NR Industrial C.A. Desarrollada con Next.js 16, Supabase (RLS, Realtime, Storage) y TypeScript estricto. Incluye integración con MercadoLibre vía webhook, sistema multi-sucursal, auth flow completo y quality gates de producción (Vitest, Playwright, GitHub Actions). Claude Code como agente principal de programación.",
+        "tags": ["Next.js", "Supabase", "TypeScript", "Tailwind CSS", "GitHub Actions", "Claude Code"],
+        "image": "/images/oswaldo-teran/proyectos/nrindustrial/1.png",
         "images": [
-          "/images/oswaldo-teran/proyectos/nr-industrial.png"
+          "/images/oswaldo-teran/proyectos/nrindustrial/1.png",
+          "/images/oswaldo-teran/proyectos/nrindustrial/2.png",
+          "/images/oswaldo-teran/proyectos/nrindustrial/3.png",
+          "/images/oswaldo-teran/proyectos/nrindustrial/4.png"
         ],
-        "link": "#",
+        "link": "https://nr-industrial.vercel.app/",
         "pais": "Venezuela"
       },
       {
@@ -191,22 +194,28 @@
     ],
     "cursos": [
       {
+        "titulo": "Curso de tips y trucos de IA",
+        "plataforma": "Platzi",
+        "año": "2026",
+        "horas": 3
+      },
+      {
+        "titulo": "Curso de Claude Code",
+        "plataforma": "Platzi",
+        "año": "2026",
+        "horas": 14
+      },
+      {
+        "titulo": "Curso de Maquetación Mobile First",
+        "plataforma": "Platzi",
+        "año": "2026",
+        "horas": 9
+      },
+      {
         "titulo": "Automatización de Flujos de Trabajo con n8n",
         "plataforma": "Platzi",
         "año": "2026",
         "horas": 10
-      },
-      {
-        "titulo": "Fundamentos de Angular",
-        "plataforma": "Platzi",
-        "año": "2022",
-        "horas": 15
-      },
-      {
-        "titulo": "FrontEnd Developer",
-        "plataforma": "Platzi",
-        "año": "2022",
-        "horas": 15
       },
       {
         "titulo": "Curso práctico de WordPress",
@@ -221,10 +230,10 @@
         "horas": 16
       },
       {
-        "titulo": "Git y GitHub Profesional",
+        "titulo": "Curso Práctico de Frontend Developer",
         "plataforma": "Platzi",
-        "año": "2023",
-        "horas": 22
+        "año": "2025",
+        "horas": 15
       },
       {
         "titulo": "Maquetación Mobile First",
@@ -237,6 +246,36 @@
         "plataforma": "Platzi",
         "año": "2025",
         "horas": 14
+      },
+      {
+        "titulo": "Curso Gratis de Programación Básica",
+        "plataforma": "Platzi",
+        "año": "2025",
+        "horas": 29
+      },
+      {
+        "titulo": "Git y GitHub Profesional",
+        "plataforma": "Platzi",
+        "año": "2023",
+        "horas": 22
+      },
+      {
+        "titulo": "Fundamentos de Angular",
+        "plataforma": "Platzi",
+        "año": "2022",
+        "horas": 15
+      },
+      {
+        "titulo": "FrontEnd Developer",
+        "plataforma": "Platzi",
+        "año": "2022",
+        "horas": 15
+      },
+      {
+        "titulo": "Curso Gratis de Marca Personal",
+        "plataforma": "Platzi",
+        "año": "2021",
+        "horas": 12
       }
     ],
     "recomendaciones": [

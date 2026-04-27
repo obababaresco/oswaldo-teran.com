@@ -66,8 +66,6 @@ const resolvePath = (path: string | undefined) => {
   return path.startsWith('/') ? path : `/${path}`;
 };
 
-// Extraer todos los tags únicos de los proyectos
-const allTags = Array.from(new Set(dev.proyectos.flatMap(p => p.tags)));
 const hasRecommendations = dev.recomendaciones && dev.recomendaciones.length > 0;
 const hasRecommendationCarousel = dev.recomendaciones && dev.recomendaciones.length > 3;
 ---
@@ -186,17 +184,9 @@ const hasRecommendationCarousel = dev.recomendaciones && dev.recomendaciones.len
     <section class="projects-section" id="proyectos">
       <div class="section-container">
         <h2 class="section-title">Proyectos Realizados</h2>
-        <div class="projects-filters-wrapper">
-          <div class="projects-filters" id="projects-filters">
-            <button class="filter-btn selected" data-filter="all">Todos</button>
-            {allTags.map((tag) => (
-              <button class="filter-btn" data-filter={tag}>{tag}</button>
-            ))}
-          </div>
-        </div>
         <div class="projects-grid" id="projects-grid">
           {dev.proyectos.map((proyecto, index) => (
-            <article class="project-card" data-tags={JSON.stringify(proyecto.tags)} data-index={index} style={index >= 6 ? "display: none;" : ""}>
+            <article class="project-card" style={index >= 6 ? "display: none;" : ""}>
               <div class="project-image-wrapper">
                 <img src={resolvePath(proyecto.image)} alt={proyecto.title} class="project-image" />
                 <div class="project-overlay">
@@ -521,46 +511,27 @@ const hasRecommendationCarousel = dev.recomendaciones && dev.recomendaciones.len
 
   document.addEventListener('DOMContentLoaded', initTypewriter);
 
-  // Filtros de proyectos y Load More
+  // Paginado de proyectos (Ver más)
   document.addEventListener('DOMContentLoaded', () => {
-    const filterButtons = document.querySelectorAll('.filter-btn');
     const projectCards = document.querySelectorAll('.project-card');
     const loadMoreBtn = document.getElementById('load-more-projects') as HTMLButtonElement;
     const totalProjects = projectCards.length;
     let visibleCount = 6;
-    let currentFilter = 'all';
 
-    // Función para actualizar la visibilidad de proyectos basado en el filtro y el contador
-    const updateProjectsVisibility = (filter: string, resetCount = false) => {
+    const updateProjectsVisibility = (resetCount = false) => {
       if (resetCount) {
         visibleCount = 6;
       }
 
-      const cardsArray = Array.from(projectCards) as HTMLElement[];
-      let visibleInFilter = 0;
-
-      cardsArray.forEach((card, index) => {
+      projectCards.forEach((card, index) => {
         const cardElement = card as HTMLElement;
-        const tags = JSON.parse(card.getAttribute('data-tags') || '[]');
-        const matchesFilter = filter === 'all' || tags.includes(filter);
-
-        if (matchesFilter) {
-          visibleInFilter++;
-          // Mostrar solo si está dentro del rango visible
-          if (visibleInFilter <= visibleCount) {
-            cardElement.style.display = 'block';
-            setTimeout(() => {
-              cardElement.style.opacity = '1';
-              cardElement.style.transform = 'translateY(0)';
-            }, 10);
-          } else {
-            // Ocultar proyectos que están fuera del rango visible
-            cardElement.style.display = 'none';
-            cardElement.style.opacity = '0';
-            cardElement.style.transform = 'translateY(20px)';
-          }
+        if (index < visibleCount) {
+          cardElement.style.display = 'block';
+          setTimeout(() => {
+            cardElement.style.opacity = '1';
+            cardElement.style.transform = 'translateY(0)';
+          }, 10);
         } else {
-          // Ocultar proyectos que no coinciden con el filtro
           cardElement.style.opacity = '0';
           cardElement.style.transform = 'translateY(20px)';
           setTimeout(() => {
@@ -569,9 +540,8 @@ const hasRecommendationCarousel = dev.recomendaciones && dev.recomendaciones.len
         }
       });
 
-      // Mostrar/ocultar botón "mostrar más"
       if (loadMoreBtn) {
-        if (visibleInFilter > visibleCount) {
+        if (totalProjects > visibleCount) {
           loadMoreBtn.classList.remove('hidden');
         } else {
           loadMoreBtn.classList.add('hidden');
@@ -579,334 +549,16 @@ const hasRecommendationCarousel = dev.recomendaciones && dev.recomendaciones.len
       }
     };
 
-    // Función para mostrar más proyectos
     const showMoreProjects = () => {
       visibleCount += 6;
-      updateProjectsVisibility(currentFilter, false);
+      updateProjectsVisibility(false);
     };
 
-    // Event listeners para filtros
-    filterButtons.forEach(button => {
-      button.addEventListener('click', () => {
-        filterButtons.forEach(btn => btn.classList.remove('selected'));
-        button.classList.add('selected');
-
-        currentFilter = button.getAttribute('data-filter') || 'all';
-        updateProjectsVisibility(currentFilter, true);
-      });
-    });
-
-    // Event listener para botón "mostrar más"
     if (loadMoreBtn) {
       loadMoreBtn.addEventListener('click', showMoreProjects);
     }
 
-    // Inicializar visibilidad
-    updateProjectsVisibility('all', true);
-  });
-
-  // Carrusel de filtros para móvil
-  document.addEventListener('DOMContentLoaded', () => {
-    const filtersContainer = document.getElementById('projects-filters') as HTMLElement;
-    const filtersWrapper = filtersContainer?.parentElement as HTMLElement;
-    if (!filtersContainer || !filtersWrapper) return;
-
-    // Solo activar en móvil
-    const isMobile = () => window.innerWidth <= 768;
-
-    let currentPage = 0;
-    let totalPages = 0;
-    let pageHeight = 0;
-    let pagePositions: number[] = []; // Posiciones Y exactas de cada página
-    let autoSlideInterval: ReturnType<typeof setInterval> | null = null;
-    let isDragging = false;
-    let startY = 0;
-    let startTranslate = 0;
-    let currentTranslate = 0;
-    let isUserInteracting = false;
-
-    // Calcular cuántas páginas necesitamos y la altura de una página
-    const calculatePages = () => {
-      if (!isMobile()) {
-        totalPages = 1;
-        pageHeight = 0;
-        return;
-      }
-
-      const filterButtons = Array.from(filtersContainer.children) as HTMLElement[];
-      if (filterButtons.length === 0) return;
-
-      // Resetear cualquier transformación para medir correctamente
-      filtersContainer.style.transform = 'translateY(0)';
-
-      // Esperar un frame para que el navegador actualice el layout
-      requestAnimationFrame(() => {
-        // Obtener las posiciones reales de cada botón después del layout
-        const buttonPositions = filterButtons.map((btn) => {
-          const rect = btn.getBoundingClientRect();
-          const containerRect = filtersContainer.getBoundingClientRect();
-          return {
-            element: btn,
-            top: rect.top - containerRect.top,
-            bottom: rect.bottom - containerRect.top,
-            height: rect.height
-          };
-        });
-
-        if (buttonPositions.length === 0) return;
-
-        // Encontrar la altura de la primera línea
-        const firstButtonTop = buttonPositions[0].top;
-        const firstLineButtons = buttonPositions.filter(pos =>
-          Math.abs(pos.top - firstButtonTop) < 10 // Tolerancia de 10px para la misma línea
-        );
-        const firstLineBottom = Math.max(...firstLineButtons.map(pos => pos.bottom));
-
-        // Encontrar la altura de la segunda línea (si existe)
-        const secondLineButtons = buttonPositions.filter(pos =>
-          pos.top > firstLineBottom - 10 && pos.top < firstLineBottom + 100
-        );
-
-        let actualPageHeight = 0;
-
-        if (secondLineButtons.length > 0) {
-          // Hay segunda línea: altura = desde el inicio hasta el final de la segunda línea
-          const secondLineBottom = Math.max(...secondLineButtons.map(pos => pos.bottom));
-          actualPageHeight = secondLineBottom - firstButtonTop;
-
-          // Calcular las posiciones de inicio de cada página
-          pagePositions = [0]; // Primera página siempre empieza en 0
-
-          let currentY = secondLineBottom;
-          let pageIndex = 1;
-
-          // Agrupar botones en páginas basándome en su posición Y
-          while (currentY < buttonPositions[buttonPositions.length - 1].bottom) {
-            // Encontrar dónde empieza la siguiente "página" de 2 líneas
-            const nextPageStart = buttonPositions.find(pos =>
-              pos.top >= currentY - 5
-            );
-
-            if (!nextPageStart) break;
-
-            // Encontrar las 2 líneas de esta página
-            const pageFirstLineButtons = buttonPositions.filter(pos =>
-              Math.abs(pos.top - nextPageStart.top) < 10
-            );
-            const pageFirstLineBottom = Math.max(...pageFirstLineButtons.map(pos => pos.bottom));
-
-            const pageSecondLineButtons = buttonPositions.filter(pos =>
-              pos.top > pageFirstLineBottom - 10 && pos.top < pageFirstLineBottom + 100
-            );
-
-            if (pageSecondLineButtons.length > 0) {
-              const pageSecondLineBottom = Math.max(...pageSecondLineButtons.map(pos => pos.bottom));
-              pagePositions.push(nextPageStart.top - firstButtonTop);
-              currentY = pageSecondLineBottom;
-            } else {
-              // Solo hay una línea en esta página
-              pagePositions.push(nextPageStart.top - firstButtonTop);
-              currentY = pageFirstLineBottom;
-            }
-
-            pageIndex++;
-          }
-
-          totalPages = pagePositions.length;
-        } else {
-          // Solo hay una línea: usar esa altura
-          actualPageHeight = firstLineBottom - firstButtonTop;
-          pagePositions = [0];
-          totalPages = 1;
-        }
-
-        pageHeight = actualPageHeight;
-
-        // Establecer altura del wrapper
-        if (pageHeight > 0 && totalPages > 1) {
-          filtersWrapper.style.height = `${pageHeight}px`;
-          filtersWrapper.style.overflow = 'hidden';
-        }
-
-        // Asegurarse de que estamos en la página 0
-        updateFiltersPosition(0, false);
-
-        if (totalPages > 1) {
-          startAutoSlide();
-        }
-      });
-    };
-
-    const updateFiltersPosition = (page: number, animate = true) => {
-      if (totalPages <= 1) {
-        filtersContainer.style.transform = 'translateY(0)';
-        currentTranslate = 0;
-        return;
-      }
-
-      currentPage = Math.max(0, Math.min(page, totalPages - 1));
-
-      // Usar las posiciones exactas de cada página si están disponibles
-      let translateY = 0;
-      if (pagePositions.length > currentPage) {
-        translateY = -pagePositions[currentPage];
-      } else {
-        // Fallback al cálculo anterior si no tenemos posiciones
-        translateY = -(currentPage * pageHeight);
-      }
-
-      currentTranslate = translateY;
-      filtersContainer.style.transition = animate ? 'transform 0.5s ease' : 'none';
-      filtersContainer.style.transform = `translateY(${translateY}px)`;
-    };
-
-    const goToPage = (page: number, animate = true) => {
-      if (totalPages <= 1) return;
-      updateFiltersPosition(page, animate);
-    };
-
-    const nextPage = () => {
-      if (totalPages <= 1) return;
-      const next = (currentPage + 1) % totalPages;
-      goToPage(next);
-    };
-
-    const startAutoSlide = () => {
-      if (isUserInteracting || totalPages <= 1 || !isMobile()) return;
-      stopAutoSlide();
-      autoSlideInterval = setInterval(() => {
-        if (!isUserInteracting && !isDragging && isMobile()) {
-          nextPage();
-        }
-      }, 3000);
-    };
-
-    const stopAutoSlide = () => {
-      if (autoSlideInterval) {
-        clearInterval(autoSlideInterval);
-        autoSlideInterval = null;
-      }
-    };
-
-    // Swipe handlers
-    const handlePointerDown = (e: PointerEvent) => {
-      if (totalPages <= 1 || !isMobile()) return;
-      isDragging = true;
-      isUserInteracting = true;
-      startY = e.clientY;
-      startTranslate = currentTranslate;
-      filtersContainer.style.transition = 'none';
-      stopAutoSlide();
-      filtersContainer.setPointerCapture(e.pointerId);
-      e.preventDefault();
-    };
-
-    const handlePointerMove = (e: PointerEvent) => {
-      if (!isDragging || totalPages <= 1 || !isMobile()) return;
-      const deltaY = e.clientY - startY;
-      let newTranslate = startTranslate + deltaY;
-
-      // Calcular límites usando las posiciones exactas
-      const maxTranslate = 0;
-      let minTranslate = 0;
-      if (pagePositions.length > 0) {
-        minTranslate = -pagePositions[pagePositions.length - 1];
-      } else {
-        minTranslate = -(totalPages - 1) * pageHeight;
-      }
-
-      newTranslate = Math.max(minTranslate, Math.min(maxTranslate, newTranslate));
-      currentTranslate = newTranslate;
-      filtersContainer.style.transform = `translateY(${newTranslate}px)`;
-    };
-
-    const handlePointerUp = (e: PointerEvent) => {
-      if (!isDragging || totalPages <= 1 || !isMobile()) return;
-      isDragging = false;
-
-      // Determinar a qué página ir según el desplazamiento
-      const threshold = 50;
-      const deltaY = currentTranslate - startTranslate;
-
-      if (Math.abs(deltaY) > threshold) {
-        if (deltaY < 0 && currentPage < totalPages - 1) {
-          goToPage(currentPage + 1);
-        } else if (deltaY > 0 && currentPage > 0) {
-          goToPage(currentPage - 1);
-        } else {
-          goToPage(currentPage);
-        }
-      } else {
-        goToPage(currentPage);
-      }
-
-      setTimeout(() => {
-        isUserInteracting = false;
-        if (isMobile()) {
-          startAutoSlide();
-        }
-      }, 500);
-
-      if (filtersContainer.hasPointerCapture && filtersContainer.hasPointerCapture(e.pointerId)) {
-        filtersContainer.releasePointerCapture(e.pointerId);
-      }
-    };
-
-    // Event listeners
-    filtersContainer.addEventListener('pointerdown', handlePointerDown);
-    filtersContainer.addEventListener('pointermove', handlePointerMove);
-    filtersContainer.addEventListener('pointerup', handlePointerUp);
-    filtersContainer.addEventListener('pointercancel', handlePointerUp);
-    filtersContainer.addEventListener('pointerleave', (e: PointerEvent) => {
-      if (isDragging) {
-        handlePointerUp(e);
-      }
-    });
-
-    // Pausar auto-slide cuando el usuario interactúa con los botones
-    filtersContainer.addEventListener('click', (e) => {
-      const target = e.target as HTMLElement;
-      if (target.classList.contains('filter-btn')) {
-        isUserInteracting = true;
-        stopAutoSlide();
-        setTimeout(() => {
-          isUserInteracting = false;
-          if (isMobile()) {
-            startAutoSlide();
-          }
-        }, 5000);
-      }
-    });
-
-    // Inicializar
-    const init = () => {
-      if (!isMobile()) {
-        filtersContainer.style.transform = '';
-        filtersContainer.style.transition = '';
-        filtersContainer.style.cursor = '';
-        filtersWrapper.style.height = '';
-        filtersWrapper.style.overflow = '';
-        stopAutoSlide();
-        return;
-      }
-
-      // Esperar a que se rendericen los botones y calcular páginas
-      setTimeout(() => {
-        calculatePages();
-      }, 100);
-    };
-
-    // Ejecutar al cargar y al redimensionar
-    init();
-
-    let resizeTimeout: ReturnType<typeof setTimeout>;
-    window.addEventListener('resize', () => {
-      clearTimeout(resizeTimeout);
-      resizeTimeout = setTimeout(() => {
-        stopAutoSlide();
-        init();
-      }, 250);
-    });
+    updateProjectsVisibility(true);
   });
 
   // Carrusel de skills para móvil (3 líneas por página)
@@ -2000,44 +1652,6 @@ const hasRecommendationCarousel = dev.recomendaciones && dev.recomendaciones.len
     scroll-margin-top: 100px;
   }
 
-  .projects-filters-wrapper {
-    position: relative;
-    margin-bottom: 3rem;
-  }
-
-  .projects-filters {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 1rem;
-    transition: transform 0.5s ease;
-    will-change: transform;
-  }
-
-  .filter-btn {
-    padding: 0.75rem 1.5rem;
-    background: var(--color-button-normal-bg);
-    color: var(--color-text-white);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 25px;
-    font-family: var(--font-tag);
-    font-weight: 600;
-    font-size: 0.9rem;
-    cursor: pointer;
-    transition: all 0.3s ease;
-  }
-
-  .filter-btn:hover {
-    border-color: var(--color-primary);
-    transform: translateY(-2px);
-  }
-
-  .filter-btn.selected {
-    background: var(--color-primary);
-    color: var(--color-text-button-selected);
-    border-color: var(--color-primary);
-  }
-
   .projects-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
@@ -2565,25 +2179,6 @@ const hasRecommendationCarousel = dev.recomendaciones && dev.recomendaciones.len
 
     .projects-section {
       padding: 3rem 0;
-    }
-
-    /* Carrusel de filtros en móvil */
-    .projects-filters-wrapper {
-      overflow: hidden;
-      position: relative;
-      -webkit-overflow-scrolling: touch;
-      /* La altura se calculará dinámicamente con JS */
-    }
-
-    .projects-filters {
-      cursor: grab;
-      user-select: none;
-      touch-action: pan-y;
-      will-change: transform;
-    }
-
-    .projects-filters:active {
-      cursor: grabbing;
     }
   }
 
