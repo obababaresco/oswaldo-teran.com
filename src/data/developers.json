@@ -21,7 +21,7 @@
     "skills": [
       {
         "name": "Next.js",
-        "icon": "/images/oswaldo-teran/skills/nextjs.png",
+        "icon": "/images/oswaldo-teran/skills/next.webp",
         "years": 1
       },
       {
@@ -41,7 +41,7 @@
       },
       {
         "name": "Tailwind CSS",
-        "icon": "/images/oswaldo-teran/skills/tailwind.svg",
+        "icon": "/images/oswaldo-teran/skills/Tailwind.png",
         "years": 1
       },
       {
