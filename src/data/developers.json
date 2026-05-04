@@ -21,7 +21,7 @@
     "skills": [
       {
         "name": "Next.js",
-        "icon": "/images/oswaldo-teran/skills/nextjs.svg",
+        "icon": "/images/oswaldo-teran/skills/nextjs.png",
         "years": 1
       },
       {
@@ -31,7 +31,7 @@
       },
       {
         "name": "Supabase",
-        "icon": "/images/oswaldo-teran/skills/supabase.svg",
+        "icon": "/images/oswaldo-teran/skills/supabase.png",
         "years": 1
       },
       {
